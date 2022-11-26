@@ -35,7 +35,8 @@ def printinfo(DetailsPrinted):
     TotTax = 0.00
     TotNetPay = 0.00
 ###################################################################
-    # write the line of code to open Employees.txt file in read mode and assign to EmpFile
+
+    EmpFile = open("Employees.txt", "r")    
 
     while True:
         rundate = input ("Enter start date for report (MM/DD/YYYY) or All for all data in file: ")
@@ -50,13 +51,13 @@ def printinfo(DetailsPrinted):
             continue  # skip next if statement and re-start loop
     while True:
         # write the line of code to read a record from EmpFile and assign it to EmpDetail
-
+        EmpDetail = EmpFile.readline()
         if not EmpDetail:
             break
         #write the line of code to remove the carriage return from the end of the record read from the file
-
+        EmpDetail = EmpDetail.replace("\n", "")
         #write the line of code to split the record read in on the pipe delimiter and assign it to EmpList
-
+        EmpList = EmpDetail.split("|")
         fromdate = EmpList[0]
         if (str(rundate).upper() != "ALL"):
             checkdate = datetime.strptime(fromdate, "%m/%d/%Y")
@@ -97,5 +98,33 @@ def PrintTotals(EmpTotals):
    
 
 if __name__ == "__main__":
-    # write the line of code to open a file Employees.txt in append mode and assign it to EmpFile
 
+    EmpFile = open("Employees.txt", "a")
+                  
+    #EmpDetailList = []
+    
+    EmpTotals = {}
+    DetailsPrinted = False
+    while True:
+        empname = GetEmpName()
+        if (empname.upper() == "END"):
+            break
+        fromdate, todate = GetDatesWorked()
+        hours = GetHoursWorked()
+        hourlyrate = GetHourlyRate()
+        taxrate = GetTaxRate()
+        ##############################################################
+    
+        EmpDetail = fromdate + "|" + todate + "|" + empname + "|" + str(hours) + "|" + str(hourlyrate) + "|" + str(taxrate) + "\n"
+        EmpFile.write(EmpDetail)
+
+    EmpFile.close()
+
+    printinfo(DetailsPrinted)
+
+
+
+####################################################################
+
+
+ 
